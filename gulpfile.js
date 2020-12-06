@@ -90,8 +90,8 @@ function html() {
 // } //обрабатываем css-файлы + sass - файлы
 function biblioCss() {
     return src([
-            'node_modules/slick-carousel/slick/slick.scss',
-        ])
+        'node_modules/slick-carousel/slick/slick.scss',
+    ])
         // .pipe(concat('style.scss'))
         .pipe(
             scss({
@@ -109,8 +109,8 @@ function biblioCss() {
             })
         )
 
-    // .pipe(dest(path.build.css))
-    .pipe(clean_css())
+        // .pipe(dest(path.build.css))
+        .pipe(clean_css())
         .pipe(
             rename({
                 extname: ".min.css"
@@ -121,9 +121,9 @@ function biblioCss() {
 } //обрабатываем css-файлы + sass - файлы
 function css() {
     return src([
-            '#src/scss/reset.scss',
-            '#src/scss/style.scss'
-        ])
+        '#src/scss/reset.scss',
+        '#src/scss/style.scss'
+    ])
         // .pipe(concat('style.scss'))
         .pipe(
             scss({
@@ -141,7 +141,7 @@ function css() {
             })
         )
 
-    .pipe(dest(path.build.css))
+        .pipe(dest(path.build.css))
         // .pipe(clean_css())
         // .pipe(
         //     rename({
@@ -168,14 +168,13 @@ function css() {
 //         .pipe(browsersync.stream())
 
 // } //обрабатывает js-файлы
-function js() {
+function biblioJs() {
     return src([
-            'node_modules/jquery/dist/jquery.min.js',
-            'node_modules/slick-carousel/slick/slick.min.js',
-            '#src/js/script.js'
-        ])
-        .pipe(concat('script.js'))
-        .pipe(dest(path.build.js))
+        'node_modules/jquery/dist/jquery.js',
+        'node_modules/slick-carousel/slick/slick.js',
+    ])
+        // .pipe(concat('script.js'))
+        // .pipe(dest(path.build.js))
         .pipe(
             uglify()
         )
@@ -188,7 +187,25 @@ function js() {
         .pipe(browsersync.stream())
 
 } //обрабатывает js-файлы
+function js() {
+    return src([
+        '#src/js/script.js',
+        '#src/js/main.js'
+    ])
+        // .pipe(concat('script.js'))
+        .pipe(dest(path.build.js))
+        // .pipe(
+        //     uglify()
+        // )
+        // .pipe(
+        //     rename({
+        //         extname: ".min.js"
+        //     })
+        // )
+        // .pipe(dest(path.build.js))
+        .pipe(browsersync.stream())
 
+} //обрабатывает js-файлы
 function img() {
     return src(path.src.images)
         .pipe(
@@ -212,7 +229,7 @@ function fonts(params) {
         .pipe(dest(path.build.fonts));
 };
 
-gulp.task('otf2ttf', function() {
+gulp.task('otf2ttf', function () {
     return src([source_folder + '/fonts/*.otf'])
         .pipe(fonter({
             formats: ['ttf']
@@ -224,7 +241,7 @@ function fontsStyle(params) {
     let file_content = fs.readFileSync(source_folder + '/scss/fonts.scss');
     if (file_content == '') {
         fs.writeFile(source_folder + '/scss/fonts.scss', '', cb);
-        return fs.readdir(path.build.fonts, function(err, items) {
+        return fs.readdir(path.build.fonts, function (err, items) {
             if (items) {
                 let c_fontname;
                 for (var i = 0; i < items.length; i++) {
@@ -240,7 +257,7 @@ function fontsStyle(params) {
     }
 }
 
-function cb() {}
+function cb() { }
 
 function watchFiles(params) {
     gulp.watch([path.watch.html], html);
@@ -253,13 +270,14 @@ function clean(params) {
     return del(path.clean);
 } //чистит dist от лишних не нужных файлов
 
-let build = gulp.series(clean, gulp.parallel(js, css, biblioCss, html, img, fonts), fontsStyle);
+let build = gulp.series(clean, gulp.parallel(js, biblioJs, css, biblioCss, html, img, fonts), fontsStyle);
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
 exports.fontsStyle = fontsStyle;
 exports.fonts = fonts;
 exports.img = img;
 exports.js = js;
+exports.biblioJs = biblioJs;
 exports.css = css;
 exports.biblioCss = biblioCss;
 exports.html = html;

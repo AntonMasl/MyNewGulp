@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "qwe";
+  font-display: swap;
+  src: url("../fonts/3966.woff") format("woff"), url("../fonts/3966.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-size: 45px;
+  background-color: brown;
+}
+
+div {
+  font-family: "qwe";
+  font-weight: 300;
+}
+
+body {
+  background-color: wheat;
+}
